@@ -10,6 +10,11 @@ class HelloCommandLinerRunner(
 
     override fun run(vararg args: String?) {
         println("****************** Hello Qualas!! ***********************")
-        reviewsService.updateReviews()
+        try {
+            reviewsService.updateReviews()
+        } catch (error: Throwable) {
+            //
+        }
+
     }
 }
