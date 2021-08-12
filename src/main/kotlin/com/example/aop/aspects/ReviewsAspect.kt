@@ -1,6 +1,7 @@
 package com.example.aop.aspects
 
 import org.aspectj.lang.JoinPoint
+import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.*
 import org.springframework.stereotype.Component
 
@@ -29,5 +30,15 @@ class ReviewsAspect {
     fun afterThrow(joinPoint: JoinPoint, error: Throwable) {
         println("Send monitor - update reviews failed")
         println("${joinPoint.signature.name}:: Fail Error: ${error.message}, Params: ${joinPoint.args}")
+    }
+    
+    @Around(funcTrigger)
+    fun around(joinPoint: ProceedingJoinPoint): Any? {
+        val start = System.currentTimeMillis()
+
+        val proceed = joinPoint.proceed()
+
+        println("${joinPoint.signature.name}:: Send tracking event: total time ${System.currentTimeMillis() - start}")
+        return proceed
     }
 }
