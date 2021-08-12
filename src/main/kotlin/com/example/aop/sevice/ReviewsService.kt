@@ -19,6 +19,7 @@ class ReviewsService(private val repo: ReviewsRepository ) {
 
         } catch(error: Throwable) {
             println("Send monitor - update reviews failed ${error.message}")
+            throw error
         }
     }
 }
