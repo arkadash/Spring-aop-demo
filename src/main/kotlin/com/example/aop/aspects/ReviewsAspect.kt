@@ -5,34 +5,32 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.*
 import org.springframework.stereotype.Component
 
-const val funcTrigger = "execution(* com.example.aop.sevice.ReviewsService.updateReviews(..))"
-
 @Aspect
 @Component
 class ReviewsAspect {
 
-    @Before(funcTrigger)
+    @Before("@annotation(LoggerExecution)")
     fun before(joinPoint: JoinPoint) {
         println("${joinPoint.signature.name}:: Send monitor - update reviews has been called")
     }
 
-    @After(funcTrigger)
+    @After("@annotation(LoggerExecution)\"")
     fun after() {
 
     }
 
-    @AfterReturning(funcTrigger)
+    @AfterReturning("@annotation(LoggerExecution)")
     fun afterReturn(joinPoint: JoinPoint) {
         println("${joinPoint.signature.name}::Send monitor - update reviews Successfully finished")
     }
 
-    @AfterThrowing(pointcut = funcTrigger, throwing = "error")
+    @AfterThrowing(pointcut = "@annotation(LoggerExecution)", throwing = "error")
     fun afterThrow(joinPoint: JoinPoint, error: Throwable) {
         println("Send monitor - update reviews failed")
         println("${joinPoint.signature.name}:: Fail Error: ${error.message}, Params: ${joinPoint.args}")
     }
     
-    @Around(funcTrigger)
+    @Around("@annotation(TimerExecution)")
     fun around(joinPoint: ProceedingJoinPoint): Any? {
         val start = System.currentTimeMillis()
 
